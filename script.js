@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+// 1. FUNGSI SIMPAN DATA
 function simpanData() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -27,22 +28,34 @@ function simpanData() {
         return;
     }
 
+    // Ambil data lama
     let anggota = JSON.parse(localStorage.getItem('dataAnggota')) || [];
-    anggota.push({ name, email, phone, minat });
+    
+    // Simpan data baru
+    anggota.push({ name: name, email: email, phone: phone, minat: minat });
     localStorage.setItem('dataAnggota', JSON.stringify(anggota));
 
     alert('Data berhasil disimpan!');
-    
-    
     window.location.href = 'index.html'; 
 }
 
-
+// 2. FUNGSI TAMPILKAN DATA (Hanya satu fungsi, jangan diduplikasi)
 document.addEventListener("DOMContentLoaded", function() {
     let tbody = document.getElementById('tableBody');
+    
+    // Pastikan tableBody ada sebelum menjalankan kode
     if (tbody) {
         let data = JSON.parse(localStorage.getItem('dataAnggota')) || [];
+        
+        // Kosongkan tabel dulu
+        tbody.innerHTML = "";
+
         data.forEach(item => {
+            // Validasi: Jika data rusak (undefined), lewati
+            if (!item.name || item.name === 'undefined') {
+                return;
+            }
+
             let row = `<tr>
                 <td>${item.name}</td>
                 <td>${item.email}</td>
